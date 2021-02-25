@@ -3,9 +3,14 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: Jost;
+  src: url(fonts/jost-variablefont_wght-webfont.woff);
+}
+
 body {
   background-color: #f5f5f5;
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Jost', sans-serif;
 }
 
 h1 {
@@ -51,8 +56,11 @@ nav {
 }
 
 select {
-  padding: 8px 10px;
-  width: 100%;
+  padding: 12px 15px;
+  width: 250px;
+  float: right;
+  margin-top: 26px;
+  border: 1px solid #e2e2e2;
 }
 
 input {
@@ -93,10 +101,11 @@ input {
 #list article {
   border: 1px solid #ebebeb;
   box-shadow: 0px 0px 14px -4px rgba(199, 199, 199, 1);
-  padding: 30px;
+  padding: 40px 30px;
   background-color: #fff;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  cursor: pointer;
 }
 
 #list article img {
@@ -104,8 +113,32 @@ input {
 }
 
 #list article h2 {
-  font-size: 16px;
+  font-size: 23px;
+  font-weight: 400;
+  margin-bottom: 10px;
   color: #000;
+}
+
+.article_crest {
+  position: relative;
+  }
+
+  .house_crest {
+    margin-left: 230px;
+    margin-top: -110px;
+    width: 110px !important;
+    height: 110px !important;
+    position: absolute;
+  }
+
+
+#list article p {
+  font-family: 'Quicksand';
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  margin-bottom: 10px;
+  color: #0a0a0a;
 }
 
 #modal {
@@ -113,7 +146,6 @@ input {
   position: fixed;
   top: 0;
   left: 0;
-  padding: 20px;
   width: 100vw;
   height: 100vh;
   display: none;
@@ -125,8 +157,8 @@ input {
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 800px;
-  height: 400px;
+  width: 900px;
+  height: 500px;
   background-color: #fff;
   margin: 4rem auto;
   box-shadow: 0px 0px 14px -4px rgba(0, 0, 0, 0.8);
@@ -275,44 +307,49 @@ button.closebutton {
   float: right;
 }
 
-.gryffindor {
-  color: red;
+#modal h2 {
+  font-weight: 400;
+margin-bottom: 20px;
+}
+
+#modal p {
+  font-family: 'Quicksand';
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  margin-bottom: 10px;
 }
 
 .gryffindor_crest {
-  background-color: red;
-  width: 50px;
-  height: 50px;
-}
-
-.ravenclaw {
-  color: blue !important;
+  background-image: url('images/gryffindor.png');
+  background-size: contain;
+  width: 150px;
+  height: 150px;
+  float: right;
 }
 
 .ravenclaw_crest {
-  background-color: blue !important;
-  width: 50px;
-  height: 50px;
-}
-
-.hufflepuff {
-  color: yellow !important;
+  background-image: url('images/ravenclaw.png');
+  background-size: contain;
+  width: 150px;
+  height: 150px;
+  float: right;
 }
 
 .hufflepuff_crest {
-  background-color: yellow !important;
-  width: 50px;
-  height: 50px;
-}
-
-.slytherin {
-  color: green !important;
+  background-image: url('images/hufflepuff.png');
+  background-size: contain;
+  width: 150px;
+  height: 150px;
+  float: right;
 }
 
 .slytherin_crest {
-  background-color: green !important;
-  width: 50px;
-  height: 50px;
+  background-image: url('images/slytherin.png');
+  background-size: contain;
+  width: 150px;
+  height: 150px;
+  float: right;
 }
 
 #modal .column:first-child {
@@ -344,11 +381,13 @@ button.closebutton {
 }
 
 button {
-  font-family: "Quicksand", sans-serif;
+  font-family: "Jost", sans-serif;
+  letter-spacing: 0.5px;
   font-weight: 400;
-  padding: 10px 25px;
-  border: 1px solid #ebebeb;
-  background-color: #887c88;
+  font-size: 15px;
+  padding: 17px 25px;
+  border: none;
+  background-color: #0a0a0a;
   color: #fff;
   margin-bottom: 8px;
   cursor: pointer;
@@ -372,12 +411,7 @@ button:focus {
   text-align: center;
 }
 
-.sorting_box {
-  display: inline-block;
-  width: 150px;
-  float: right;
-  margin-top: 40px;
-}
+
 
 .info_box {
   background-color: #fff;
@@ -388,10 +422,13 @@ button:focus {
 }
 
 .info_box h3 {
+  font-size: 28px;
+  font-weight: 400;
   margin-bottom: 10px;
 }
 
 .info_box p {
+  font-family: 'Quicksand';
   margin: 5px 0;
 }
 

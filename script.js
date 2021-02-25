@@ -260,12 +260,15 @@ function displayList(studentList) {
 function displayStudent(student) {
   //Create clone
   const clone = document.querySelector("template#hogwarts_student").content.cloneNode(true);
+  let house_crest = clone.querySelector(".house_crest");
+
+  house_crest.classList.add(student.house.toLowerCase() + "_crest");
 
   //Set clone data
-  clone.querySelector("[data-field=firstname]").textContent = student.firstName;
-  clone.querySelector("[data-field=lastname]").textContent = student.lastName;
+  clone.querySelector("[data-field=firstname]").textContent = student.firstName + " " + student.lastName;
   clone.querySelector("[data-field=gender]").textContent = `Gender: ${student.gender}`;
   clone.querySelector("[data-field=house]").textContent = `House: ${student.house}`;
+
 
   if (student.enrollement === true) {
     clone.querySelector("[data-field=enrollment]").textContent = "Status: Expelled";

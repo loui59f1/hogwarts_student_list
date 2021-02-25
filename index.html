@@ -20,7 +20,7 @@
         <h2 class="heading">Alle</h2>
       </div>
       <div class="column info_box">
-        <h3>Overview students</h3>
+        <h3>Overview</h3>
         <p class="total_students">Total students:&nbsp;</p>
         <p class="total_expelled">Expelled:&nbsp;</p>
         <p class="total_slytherin">Slytherin students:&nbsp;</p>
@@ -43,7 +43,6 @@
       <button class="filter" data-action="filter" data-filter="expelled">Expelled</button>
       <button class="filter" data-action="filter" data-filter="squad">Squad members</button>
     </div>
-
     <select id="sorting">
       <option data-action="sort" data-sort-direction="asc" data-sort="sort">Sort by</option>
       <option data-action="sort" data-sort-direction="asc" data-sort="firstName">Firstname</option>
@@ -71,12 +70,15 @@
     <template id="hogwarts_student">
       <article>
 
-        <p data-field="image"><img sr=""></p>
-        <h2 data-field="firstname">firstname</h2>
-        <p data-field="lastname">lastname</p>
-        <p data-field="gender">gender</p>
-        <p data-field="house">house</p>
-        <p data-field="enrollment">Enrollment</p>
+        <div class="student_details">
+          <h2 data-field="firstname">firstname</h2>
+          <p data-field="gender">gender</p>
+          <p data-field="house">house</p>
+          <p data-field="enrollment">Enrollment</p>
+        </div>
+        <div class="article_crest">
+          <div class="house_crest"></div>
+        </div>
       </article>
     </template>
     </section>
