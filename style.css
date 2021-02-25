@@ -392,6 +392,11 @@ button {
   margin-bottom: 8px;
   cursor: pointer;
   box-shadow: 0px 0px 8px -4px rgba(199, 199, 199, 1);
+  transition: all .3s ease-in-out;
+}
+
+button:hover {
+  filter: brightness(130%);
 }
 
 button:focus {
