@@ -1,0 +1,423 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f5f5;
+  font-family: 'Quicksand', sans-serif;
+}
+
+h1 {
+  font-size: 40px;
+}
+
+h2 {
+  font-size: 25px;
+}
+
+p {
+  font-size: 15px;
+}
+
+/*HEADER*************************/
+
+header {
+  width: 100%;
+  height: 400px;
+  background-image: url(images/header.jpg);
+  background-size: cover;
+  text-align: center;
+  padding: 20px;
+  color: #fff;
+}
+
+.heading {
+  text-align: center;
+}
+
+header h2 {
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 100;
+  letter-spacing: 2.5px;
+  margin-top: 25px;
+}
+
+/*NAV****************************/
+nav {
+  display: flex;
+  justify-content: space-around;
+}
+
+select {
+  padding: 8px 10px;
+  width: 100%;
+}
+
+input {
+  padding: 8px 10px;
+  width: 100%;
+}
+
+/*SORTING************************/
+
+#sorting option.sortby {
+  text-decoration: underline;
+}
+
+#sorting option.sortby[data-sort-direction="asc"]::after {
+  content: "↓";
+}
+
+#sorting option.sortby[data-sort-direction="desc"]::after {
+  content: "↑";
+}
+
+
+/*SECTION LISt*******************/
+
+#list {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px;
+      padding-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-gap: 2em;
+  padding-bottom: 50px;
+}
+
+/***************************/
+
+#list article {
+  border: 1px solid #ebebeb;
+  box-shadow: 0px 0px 14px -4px rgba(199, 199, 199, 1);
+  padding: 30px;
+  background-color: #fff;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+#list article img {
+  width: 100%;
+}
+
+#list article h2 {
+  font-size: 16px;
+  color: #000;
+}
+
+#modal {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+}
+
+#modal article {
+  display: flex;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 400px;
+  background-color: #fff;
+  margin: 4rem auto;
+  box-shadow: 0px 0px 14px -4px rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+}
+
+.student_actions {
+  margin-top: 25px;
+}
+
+#student-photo,
+#housecrest {
+  height: 80%;
+}
+
+#housecrest img,
+#student-photo img {
+  width: 100%;
+  height: 100%;
+}
+
+#modal-body {
+  display: flex;
+  margin-top: 0;
+  height: 75%;
+}
+
+#modal-body button {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: 1px solid black;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+#modal-body button:hover {
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 255, 0.2);
+}
+
+#base-info {
+  width: 40%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: auto;
+  font-size: 1.1rem;
+  margin-left: 5rem;
+  border-right: 1px solid var(--primary-color);
+}
+
+.base-info-names,
+#base-info p {
+  margin: 0.8rem 0 0.8rem 0;
+}
+
+.base-info-names {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+#additional-info {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: auto;
+  font-size: 1.1rem;
+  margin-left: 5rem;
+  line-height: 1.8rem;
+}
+
+#additional-info div {
+  margin: 1rem 0 1rem 0;
+}
+
+#close {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  cursor: pointer;
+}
+
+.hide {
+  display: none;
+}
+
+/* POPUP HOUSES - STYLING */
+
+.popupGryffindor article {
+  background-color: #d33d3d;
+}
+
+.popupSlytherin article {
+  background-color: #4b9b66;
+}
+
+.popupRavenclaw article {
+  background-color: #4960ac;
+}
+
+.popupHufflepuff article {
+  background-color: #f1de6f;
+}
+
+/* DIALOGUE BOXES */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.377);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog {
+  box-shadow: 3px 1px 11px #333;
+  border-radius: 12px;
+  padding: 2em;
+  background-color: cornsilk;
+  position: relative;
+}
+
+button.closebutton {
+  position: absolute;
+  right: -1em;
+  top: -1em;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+}
+
+.dialog h1 {
+  margin-top: 0;
+}
+
+.hide2 {
+  visibility: hidden;
+}
+
+#house_crest {
+  float: right;
+}
+
+.gryffindor {
+  color: red;
+}
+
+.gryffindor_crest {
+  background-color: red;
+  width: 50px;
+  height: 50px;
+}
+
+.ravenclaw {
+  color: blue !important;
+}
+
+.ravenclaw_crest {
+  background-color: blue !important;
+  width: 50px;
+  height: 50px;
+}
+
+.hufflepuff {
+  color: yellow !important;
+}
+
+.hufflepuff_crest {
+  background-color: yellow !important;
+  width: 50px;
+  height: 50px;
+}
+
+.slytherin {
+  color: green !important;
+}
+
+.slytherin_crest {
+  background-color: green !important;
+  width: 50px;
+  height: 50px;
+}
+
+#modal .column:first-child {
+  padding: 10px;
+  flex-basis: 300px;
+  flex-grow: 1;
+}
+
+#modal .column:last-child {
+  padding: 10px;
+  flex-basis: 400px;
+  flex-grow: 1;
+}
+
+#modal img {
+  padding: 25px;
+  width: 100%;
+}
+
+#close {
+  position: fixed;
+  top: 1em;
+  right: 1.5em;
+  color: #000;
+  padding: 0.1em;
+  cursor: pointer;
+  font-family: "Quicksand", sans-serif;
+  font-size: 25px;
+}
+
+button {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 400;
+  padding: 10px 25px;
+  border: 1px solid #ebebeb;
+  background-color: #887c88;
+  color: #fff;
+  margin-bottom: 8px;
+  cursor: pointer;
+  box-shadow: 0px 0px 8px -4px rgba(199, 199, 199, 1);
+}
+
+button:focus {
+  outline: 0;
+}
+
+#user_nav {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+
+.filter_btns {
+  display: inline-block;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.sorting_box {
+  display: inline-block;
+  width: 150px;
+  float: right;
+  margin-top: 40px;
+}
+
+.info_box {
+  background-color: #fff;
+  color: #000;
+  padding: 25px;
+  height: 100%;
+  text-align: left;
+}
+
+.info_box h3 {
+  margin-bottom: 10px;
+}
+
+.info_box p {
+  margin: 5px 0;
+}
+
+.heading_box {
+  margin-top: 10%;
+  text-align: center;
+}
+
+@media screen and (min-width: 400px) {
+  .header_inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    grid-gap: 5em;
+    padding: 25px;
+    max-width: 1300px;
+    margin: 0 auto;
+    height: 100%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  header {
+    height: 70vh;
+  }
+
+  .info_box {
+    margin-top: 30px;
+  }
+}
