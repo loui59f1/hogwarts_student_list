@@ -18,16 +18,28 @@
       <div class="column heading_box">
         <h1>Hogwarts students 1991</h1>
         <h2 class="heading">Alle</h2>
+        <div class="search_bar">
+          <form>
+            <div class="search_box">
+              <input type="text" id="search_by_name" name="name" placeholder="&#xf002 Search for student name" />
+            </div>
+          </form>
+        </div>
       </div>
       <div class="column info_box">
         <h3>Overview</h3>
-        <p class="total_students">Total students:&nbsp;</p>
-        <p class="total_expelled">Expelled:&nbsp;</p>
-        <p class="total_slytherin">Slytherin students:&nbsp;</p>
-        <p class="total_hufflepuff">Hufflepuff students:&nbsp;</p>
-        <p class="total_gryffindor">Gryffindor students:&nbsp;</p>
-        <p class="total_ravenclaw">Ravenclaw students:&nbsp;</p>
-        <p class="total_viewed">Currently displayed:</p>
+        <div class="overview">
+          <p class="total_viewed">Currently displayed:</p>
+          <p class="total_students">Total students:&nbsp;</p>
+          <p class="total_expelled">Expelled:&nbsp;</p>
+          <p class="total_squad">Members of squad:&nbsp;</p>
+        </div>
+        <div class="houses">
+          <p class="total_slytherin">Slytherin students:&nbsp;</p>
+          <p class="total_hufflepuff">Hufflepuff students:&nbsp;</p>
+          <p class="total_gryffindor">Gryffindor students:&nbsp;</p>
+          <p class="total_ravenclaw">Ravenclaw students:&nbsp;</p>
+        </div>
       </div>
     </div>
   </header>
@@ -50,15 +62,6 @@
       <option data-action="sort" data-sort-direction="asc" data-sort="gender">Gender</option>
       <option data-action="sort" data-sort-direction="asc" data-sort="blood">Blood status</option>
     </select>
-
-    <div class="search_bar">
-      <form>
-        <div class="search_box">
-          <input type="text" id="search_by_name" name="name" placeholder="&#xf002 Search for student name" />
-        </div>
-      </form>
-    </div>
-
   </section>
 
   <!-- Here is the main with the count and studentlist section -->
@@ -69,7 +72,6 @@
 
     <template id="hogwarts_student">
       <article>
-
         <div class="student_details">
           <h2 data-field="firstname">firstname</h2>
           <p data-field="gender">gender</p>
@@ -88,57 +90,52 @@
 
   <!-- Here is the student pop op -->
 
-  <div data-enrolmentstatus="enrolled">
-
-    <div id="modal">
-      <article>
-        <div id="close">X</div>
-        <div class="column img">
-          <img data-field="image" src="" alt="" class="modal_img" />
-          <div id="icon_expelled" class="hide2">
-            <h3>Expelled</h3>
-          </div>
+  <div id="modal">
+    <article>
+      <div id="close">X</div>
+      <div class="column img">
+        <img data-field="image" src="" alt="" class="modal_img" />
+        <div id="icon_expelled" class="hide2">
+          <h3>Expelled</h3>
         </div>
+      </div>
 
-        <div class="column">
-          <h2></h2>
-          <p data-field="house">House:&nbsp;</p>
-          <p data-field="gender">Gender:&nbsp;</p>
-          <p data-field="bloodstatus">Blood status:&nbsp;</p>
-          <p data-field="enrollment">Enrolled status:&nbsp;</p>
-          <p data-field="prefected">Prefect status:&nbsp;</p>
-          <p data-field="squad">Member status:&nbsp;</p>
-          <div id="housecrest">
-            <div class="crest"></div>
-          </div>
-          <div class="student_actions">
-            <button class="expelBtn">Expell student</button>
-            <button data-field="prefect" data-field="false">Promote to prefect</button>
-            <button class="squad_btn hide2" data-squad="true">Make member of squad</button>
-          </div>
+      <div class="column">
+        <h2></h2>
+        <p data-field="house">House:&nbsp;</p>
+        <p data-field="gender">Gender:&nbsp;</p>
+        <p data-field="bloodstatus">Blood status:&nbsp;</p>
+        <p data-field="enrollment">Enrolled status:&nbsp;</p>
+        <p data-field="prefected">Prefect status:&nbsp;</p>
+        <p data-field="squad">Member status:&nbsp;</p>
+        <div id="housecrest">
+          <div class="crest"></div>
         </div>
-      </article>
-    </div>
+        <div class="student_actions">
+          <button class="expelBtn">Expell student</button>
+          <button data-field="prefect" data-field="false">Promote to prefect</button>
+          <button class="squad_btn hide2" data-squad="true">Make member of squad</button>
+        </div>
+      </div>
+    </article>
   </div>
-
   </div>
 
   <!--------Dialogue boxes -->
 
   <div id="remove_other" class="modal hide2">
     <div class="dialog">
-      <button class="closebutton">X</button>
+      <div id="close">X</div>
       <h1>Warning!</h1>
-      <p>There can be only one prefect of each type.<br>
-        Do you want to remove the other prefect? </p>
+      <p>There can be only one prefect of each house.</p>
+      <p>Do you want to remove the other prefect? </p>
       <button id="removeother">Remove <span data-field="otherprefect">other</span></button>
-      </p>
     </div>
   </div>
 
   <div id="remove_aorb" class="modal hide2">
     <div class="dialog">
-      <button class="closebutton">X</button>
+      <div id="close">X</div>
       <h1>Warning!</h1>
       <p>There can not be anymore than to winners.<br>
         Do you want to remove on of the existing winners? </p>

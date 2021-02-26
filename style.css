@@ -29,7 +29,7 @@ p {
 
 header {
   width: 100%;
-  height: 400px;
+  height: 300px;
   background-image: url(images/header.jpg);
   background-size: cover;
   text-align: center;
@@ -278,25 +278,46 @@ input {
   align-items: center;
 }
 
-.dialog {
-  box-shadow: 3px 1px 11px #333;
-  border-radius: 12px;
-  padding: 2em;
-  background-color: cornsilk;
-  position: relative;
+.remove_other {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
 }
 
-button.closebutton {
-  position: absolute;
-  right: -1em;
-  top: -1em;
-  border-radius: 50%;
-  width: 2em;
-  height: 2em;
+.dialog {
+  text-align: center;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 500px;
+  background-color: #f5f5f5;
+  margin: 4rem auto;
+  box-shadow: 0px 0px 14px -4px rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  padding-top: 150px;
+}
+
+.dialog button {
+  margin-top: 35px;
 }
 
 .dialog h1 {
-  margin-top: 0;
+  margin-bottom: 20px;
+  display: block;
+  font-size: 40px;
+}
+
+.dialog p {
+  font-size: 17px;
+  display: block;
+  margin-bottom: 10px;
 }
 
 .hide2 {
@@ -423,7 +444,7 @@ button:focus {
 
 
 .info_box {
-  background-color: #fff;
+  background-color: #f5f5f5;
   color: #000;
   padding: 25px;
   height: 100%;
@@ -446,11 +467,20 @@ button:focus {
   text-align: center;
 }
 
+.overview {
+  display: inline-block;
+}
+
+.houses {
+  display: inline-block;
+  float: right;
+}
+
 @media screen and (min-width: 400px) {
   .header_inner {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    grid-gap: 5em;
+    grid-gap: 50px;
     padding: 25px;
     max-width: 1300px;
     margin: 0 auto;
