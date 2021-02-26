@@ -376,14 +376,6 @@ function displayModal(student) {
     icon_expelled.classList.remove("hide2");
   }
 
-  if (student.prefect === true) {
-    modal.querySelector("[data-field=prefected]").textContent = "Is a prefect";
-    modal.querySelector("[data-field=prefect]").textContent = "Remove prefect";
-  } else {
-    modal.querySelector("[data-field=prefected]").textContent = "Not a prefect";
-    modal.querySelector("[data-field=prefect]").textContent = "Promote to prefect";
-  }
-
   if (student.inquisitorial === true) {
     modal.querySelector("[data-field=squad]").textContent = "Is a prefect";
     modal.querySelector(".squad_btn").textContent = "Remove as member";
@@ -391,6 +383,14 @@ function displayModal(student) {
   if (student.inquisitorial === false) {
     modal.querySelector("[data-field=squad]").textContent = "Not a prefect";
     modal.querySelector(".squad_btn").textContent = "Make a member of squad";
+  }
+
+  if (student.prefect === true) {
+    modal.querySelector("[data-field=prefected]").textContent = "Is a prefect";
+    modal.querySelector("[data-field=prefect]").textContent = "Remove prefect";
+  } else {
+    modal.querySelector("[data-field=prefected]").textContent = "Not a prefect";
+    modal.querySelector("[data-field=prefect]").textContent = "Promote to prefect";
   }
 
   // Only slytherin students --> make squad member
@@ -438,16 +438,12 @@ function displayModal(student) {
       student.prefect = false;
       console.log("Student prefect false", student);
       console.log(student.prefect);
-      modal.querySelector("[data-field=prefected]").textContent = "Not a prefect";
-      modal.querySelector("[data-field=prefect]").textContent = "Promote to prefect";
     } else {
       console.log("try to make");
       tryToMakeAPrefect(student);
       console.log(student.prefect);
-      modal.querySelector("[data-field=prefected]").textContent = "Is a prefect";
-      modal.querySelector("[data-field=prefect]").textContent = "Remove prefect";
     }
-    buildList();
+    buildList(allStudents);
   }
 
   //luk modal
@@ -673,17 +669,7 @@ function displayNumbers() {
 }
 
 function makeSquadMember(student) {
-  if (student.inquisitorial === true) {
-    student.inquisitorial = false;
-    console.log("Student false", student);
-    console.log(student.inquisitorial);
-    modal.querySelector("[data-field=squad]").textContent = "Not a member";
-    modal.querySelector(".squad_btn").textContent = "Make a member of squad";
-
-    allInSquad.splice(allInSquad.indexOf(student), 1);
-    buildList(allInSquad);
-
-  } else {
+  if (student.inquisitorial === false) {
     student.inquisitorial = true;
     console.log("Student true", student);
     console.log(student.inquisitorial);
@@ -693,6 +679,16 @@ function makeSquadMember(student) {
     // Tilføjer elev til squad list
     allInSquad.push(student);
     buildList();
+  } else {
+    student.inquisitorial = false;
+    console.log("Student false", student);
+    console.log(student.inquisitorial);
+    modal.querySelector("[data-field=squad]").textContent = "Not a member";
+    modal.querySelector(".squad_btn").textContent = "Make a member of squad";
+
+    allInSquad.splice(allInSquad.indexOf(student), 1);
+    buildList(allInSquad);
+
   }
 
 
