@@ -403,6 +403,10 @@ button:focus {
   outline: 0;
 }
 
+.squad_btn {
+  background-color: orangered;
+}
+
 #user_nav {
   max-width: 1300px;
   margin: 0 auto;

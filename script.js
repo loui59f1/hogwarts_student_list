@@ -17,7 +17,7 @@ const Student = {
   enrollment: true,
   prefect: false,
   inquisitorial: false,
-  bloodstatus: undefined,
+  bloodstatus: "",
   imageSrc: "null",
 };
 
@@ -128,6 +128,38 @@ function prepareObjects(jsonData) {
     //SingleStudent.nickName = singleStudent.nickNameCapitalized;
     singleStudent.gender = singleStudent.genderCapitalized;
     singleStudent.house = singleStudent.houseCapitalized;
+
+    //insert correct photo filename
+    singleStudent.image = (
+      singleStudent.lastName +
+      "_" +
+      singleStudent.firstName.substring(0, 1) +
+      ".png"
+    ).toLowerCase();
+
+    if (singleStudent.firstName === "Justin") {
+      singleStudent.image = (
+        singleStudent.lastName.substring(singleStudent.lastName.indexOf("-") + 1) +
+        "_" +
+        singleStudent.firstName.substring(0, 1) +
+        ".png"
+      ).toLowerCase();
+    }
+
+    if (singleStudent.firstName === "Leanne") {
+      singleStudent.image = "";
+    }
+
+    // Patil søstrene skal begge have anderledes billede
+    if (singleStudent.lastName === "Patil") {
+      singleStudent.image = (
+        singleStudent.lastName +
+        "_" +
+        singleStudent.firstName +
+        ".png"
+      ).toLowerCase();
+    }
+
 
     //Adding all the objects into the array
     allStudents.push(singleStudent);
@@ -276,12 +308,12 @@ function displayStudent(student) {
     clone.querySelector("[data-field=enrollment]").textContent = "Status: Enrolled";
   }
 
-  if (student.inquisitorial === true) {
-    document.querySelector(".squad").textContent = "Status: Member";
-    document.querySelector(".squad_btn").textContent = "Remove as a member";
+  if (student.prefect === true) {
+    document.querySelector("[data-field=prefected]").textContent = "Status: Has prefect";
+    document.querySelector("[data-field=prefect]").textContent = "Remove prefect";
   } else {
-    document.querySelector(".squad").textContent = "Status: not a member";
-    document.querySelector(".squad_btn").textContent = "Make a member of squad";
+    document.querySelector("[data-field=prefected]").textContent = "Status: No prefect";
+    document.querySelector("[data-field=prefect]").textContent = "Add prefect";
   }
 
   //buildList(); //updating the list view
@@ -303,6 +335,8 @@ function displayModal(student) {
 
   modal.classList.add(student.house.toLowerCase());
   crest.classList.add(student.house.toLowerCase() + "_crest");
+  modal.querySelector(".expelBtn").style.display = "block";
+
 
   console.log("open popup");
 
@@ -314,24 +348,27 @@ function displayModal(student) {
   modal.querySelector("#modal h2").textContent = `${student.firstName} ${student.lastName}`;
   modal.querySelector("[data-field=gender]").textContent = `Gender: ${student.gender}`;
   modal.querySelector("[data-field=house]").textContent = `House: ${student.house}`;
-  modal.querySelector("[data-field=image]").src = `images/${student.lastName}_${student.firstName.charAt(0)}.png`;
+  modal.querySelector("[data-field=image]").src = `images/` + student.image;
 
-  //toggle student enrollment
+  // EXPELL KNAP OG TEXT
   if (student.enrollment === true) {
     modal.querySelector("[data-field=enrollment]").textContent = "Status: Enrolled";
     modal.querySelector(".expelBtn").textContent = "Expel student";
+    icon_expelled.classList.add("hide2");
   } else {
     modal.querySelector("[data-field=enrollment]").textContent = "Status: Expelled";
-    modal.querySelector(".expelBtn").textContent = "Enroll student";
+    modal.querySelector(".expelBtn").style.display = "none";
+    icon_expelled.classList.remove("hide2");
   }
 
-  //toggle student enrollment
-  if (student.inquisitorial === true) {
-    modal.querySelector(".squad").textContent = "Member";
-    modal.querySelector(".squad_btn").textContent = "Remove as member";
-  } else {
-    modal.querySelector(".squad_btn").textContent = "Not a member";
-    modal.querySelector(".squad_btn").textContent = "Make a member of squad";
+  // Only slytherin students --> make squad member
+  if (student.house.toLowerCase() === "slytherin") {
+    console.log("in slytherin");
+    modal.querySelector(".squad_btn").classList.remove("hide2");
+    modal.querySelector(".squad_btn").dataset.squad = student.inquisitorial;
+    modal.querySelector(".squad_btn").addEventListener("click", () => {
+      makeSquadMember(student);
+    });
   }
 
   // Hvis der bliver klikket på knappen ændres student enrollment
@@ -339,19 +376,22 @@ function displayModal(student) {
   function expelStudent(student) {
     console.log(student);
     if (student.enrollment === true) {
+      console.log(student.enrollment);
       student.enrollment = false;
-      //showExpelledStudent(student);
     } else {
-      console.log("Enroled");
+      console.log(student.enrollment);
       student.enrollment = true;
     }
-    displayModal(student);
-    //buildList();
 
-    //add to expelled students array
+    // Fjerner fra allstudents liste
+    allStudents.splice(allStudents.indexOf(student), 1);
+
+    // tilføjer til allexpelled liste
     allExpelled.push(student);
 
-    //remove from allStudents array
+    displayModal(student);
+    buildList();
+
   }
 
 
@@ -370,18 +410,6 @@ function displayModal(student) {
 
     displayModal(student);
   }
-
-  //allow slytherin students to be appointed to the inquisitorial squad
-  if (student.house.toLowerCase() === "slytherin") {
-    console.log("in slytherin");
-    modal.querySelector(".squad_btn").classList.remove("hide2");
-    modal.querySelector(".squad_btn").dataset.squad = student.inquisitorial;
-    modal.querySelector(".squad_btn").addEventListener("click", () => {
-      appointToInqSquad(student);
-    });
-  }
-
-
 
   //luk modal
   modal.querySelector("#close").addEventListener("click", closeModal);
@@ -519,9 +547,7 @@ function tryToMakeAPrefect(selectedStudent) {
 
 function searchStudent() {
   // finder værdien af det indtastede i søgefelt
-  let searchstring = document
-    .querySelector("#search_by_name")
-    .value.toLowerCase();
+  let searchstring = document.querySelector("#search_by_name").value.toLowerCase();
 
   // Søg igennem studerende og opdater displayList
   let searchResult = allStudents.filter(filterSearch);
@@ -529,15 +555,13 @@ function searchStudent() {
   // Closure in searchStudent
   function filterSearch(student) {
     // Søger på fornavn og efternavn
-    if (
-      student.firstName.toString().toLowerCase().includes(searchstring) ||
-      student.lastName.toString().toLowerCase().includes(searchstring)
-    ) {
+    if (student.firstName.toString().toLowerCase().includes(searchstring) || student.lastName.toString().toLowerCase().includes(searchstring)) {
       return true;
     } else {
       return false;
     }
   }
+
   // Hvis søgefeltet er tomt viser det igen de studerende
   if (searchstring == " ") {
     displayList(allStudents);
@@ -560,11 +584,8 @@ function displayNumbers() {
   document.querySelector(".total_students").textContent = "Total students: ";
   document.querySelector(".total_students").textContent += allStudents.length;
 
-  document.querySelector(".total_slytherin").textContent =
-    "Slytherin students: ";
-  document.querySelector(
-    ".total_slytherin"
-  ).textContent += filterStudentsbyHouse("slytherin");
+  document.querySelector(".total_slytherin").textContent = "Slytherin students: ";
+  document.querySelector(".total_slytherin").textContent += filterStudentsbyHouse("slytherin");
 
   document.querySelector(".total_hufflepuff").textContent =
     "Hufflepuff students: ";
@@ -600,13 +621,29 @@ function displayNumbers() {
   }
 }
 
-function appointToInqSquad(student) {
+function makeSquadMember(student) {
   if (student.inquisitorial === true) {
     student.inquisitorial = false;
-  } else if (student.inquisitorial === false) {
+    console.log("Student false", student);
+    console.log(student.inquisitorial);
+    modal.querySelector("[data-field=squad]").textContent = "Not a member";
+    modal.querySelector(".squad_btn").textContent = "Make a member of squad";
+
+    allInSquad.splice(allInSquad.indexOf(student), 1);
+    buildList();
+
+  } else {
     student.inquisitorial = true;
+    console.log("Student true", student);
+    console.log(student.inquisitorial);
+    modal.querySelector("[data-field=squad]").textContent = "Member of squad";
+    modal.querySelector(".squad_btn").textContent = "Remove as member";
+
+    // Tilføjer elev til squad list
+    allInSquad.push(student);
+    buildList();
   }
 
-  allInSquad.push(student);
-  buildList();
+
+
 }
