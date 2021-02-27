@@ -29,7 +29,7 @@
       <div class="column info_box">
         <h3>Overview</h3>
         <div class="overview">
-          <p class="total_viewed">Currently displayed:</p>
+          <p class="total_viewed">Displayed students:</p>
           <p class="total_students">Total students:&nbsp;</p>
           <p class="total_expelled">Expelled:&nbsp;</p>
           <p class="total_squad">Members of squad:&nbsp;</p>
@@ -78,6 +78,7 @@
           <p data-field="house">house</p>
           <p data-field="enrollment">Enrollment</p>
         </div>
+        <div class="squad_star"></div>
         <div class="article_crest">
           <div class="house_crest"></div>
         </div>
@@ -127,23 +128,9 @@
     <div class="dialog">
       <div id="close">X</div>
       <h1>Warning!</h1>
-      <p>There can be only one prefect of each house.</p>
-      <p>Do you want to remove the other prefect? </p>
-      <button id="removeother">Remove <span data-field="otherprefect">other</span></button>
-    </div>
-  </div>
-
-  <div id="remove_aorb" class="modal hide2">
-    <div class="dialog">
-      <div id="close">X</div>
-      <h1>Warning!</h1>
-      <p>There can not be anymore than to winners.<br>
-        Do you want to remove on of the existing winners? </p>
-      <div class="sidebyside">
-        <button id="removea">Remove <span data-field="prefectA">A</span></button>
-        <button id="removeb">Remove <span data-field="prefectB">B</span></button>
-      </div>
-      </p>
+      <p>There can be only two prefects in each house.</p>
+      <p>Do you want to remove one prefect? </p>
+      <button id="removeother">Remove <span data-field="otherprefect">one prefect</span></button>
     </div>
   </div>
 
