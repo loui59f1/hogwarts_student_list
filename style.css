@@ -13,46 +13,26 @@ body {
   font-family: 'Jost', sans-serif;
 }
 
+.hide {
+  display: none;
+}
+
 h1 {
-  font-size: 40px;
+  font-size: 50px;
+  font-weight: 500;
+  margin-bottom: 20px;
 }
 
-h2 {
-  font-size: 25px;
-}
-
-p {
-  font-size: 15px;
-}
-
-/*HEADER*************************/
+/* -- Header + counter + filter sektion -- */
 
 header {
   width: 100%;
-  height: 300px;
+  height: 350px;
   background-image: url(images/header.jpg);
   background-size: cover;
   text-align: center;
   padding: 20px;
   color: #fff;
-}
-
-.heading {
-  text-align: center;
-}
-
-header h2 {
-  color: #fff;
-  text-transform: uppercase;
-  font-weight: 100;
-  letter-spacing: 2.5px;
-  margin-top: 25px;
-}
-
-/*NAV****************************/
-nav {
-  display: flex;
-  justify-content: space-around;
 }
 
 select {
@@ -64,41 +44,74 @@ select {
 }
 
 input {
-  padding: 8px 10px;
+  padding: 15px 10px;
   width: 100%;
+  border-radius: 5px;
+  border: none;
+  padding-left: 20px;
+  font-family: 'Quicksand';
 }
 
-/*SORTING************************/
-
-#sorting option.sortby {
-  text-decoration: underline;
-}
-
-#sorting option.sortby[data-sort-direction="asc"]::after {
-  content: "↓";
-}
-
-#sorting option.sortby[data-sort-direction="desc"]::after {
-  content: "↑";
-}
-
-
-/*SECTION LISt*******************/
-
-#list {
+#user_nav {
   max-width: 1300px;
   margin: 0 auto;
   padding: 20px;
-      padding-bottom: 20px;
+}
+
+.filter_btns {
+  display: inline-block;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.info_box {
+  background-color: #f5f5f5;
+  color: #000;
+  padding: 35px;
+  padding-right: 50px;
+  height: 100%;
+  text-align: left;
+}
+
+.info_box h3 {
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.info_box p {
+  font-family: 'Quicksand';
+  margin: 8px 0;
+}
+
+.heading_box {
+  margin-top: 10%;
+  text-align: center;
+}
+
+.overview {
+  display: inline-block;
+}
+
+.houses {
+  display: inline-block;
+  float: right;
+}
+
+/* -- Liste sektion med studerende -- */
+
+#studentlist {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   grid-gap: 2em;
   padding-bottom: 50px;
 }
 
-/***************************/
-
-#list article {
+#studentlist article {
   border: 1px solid #ebebeb;
   box-shadow: 0px 0px 14px -4px rgba(199, 199, 199, 1);
   padding: 40px 30px;
@@ -108,11 +121,11 @@ input {
   cursor: pointer;
 }
 
-#list article img {
+#studentlist article img {
   width: 100%;
 }
 
-#list article h2 {
+#studentlist article h2 {
   font-size: 23px;
   font-weight: 400;
   margin-bottom: 10px;
@@ -121,18 +134,17 @@ input {
 
 .article_crest {
   position: relative;
-  }
+}
 
-  .house_crest {
-    margin-left: 230px;
-    margin-top: -110px;
-    width: 110px !important;
-    height: 110px !important;
-    position: absolute;
-  }
+.house_crest {
+  margin-left: 230px;
+  margin-top: -110px;
+  width: 110px !important;
+  height: 110px !important;
+  position: absolute;
+}
 
-
-#list article p {
+#studentlist article p {
   font-family: 'Quicksand';
   font-size: 15px;
   font-weight: 400;
@@ -171,123 +183,7 @@ input {
   margin-top: 25px;
 }
 
-#student-photo,
-#housecrest {
-  height: 80%;
-}
-
-#housecrest img,
-#student-photo img {
-  width: 100%;
-  height: 100%;
-}
-
-#modal-body {
-  display: flex;
-  margin-top: 0;
-  height: 75%;
-}
-
-#modal-body button {
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
-  border: 1px solid black;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-#modal-body button:hover {
-  box-shadow: 1px 1px 2px 1px rgba(0, 0, 255, 0.2);
-}
-
-#base-info {
-  width: 40%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin: auto;
-  font-size: 1.1rem;
-  margin-left: 5rem;
-  border-right: 1px solid var(--primary-color);
-}
-
-.base-info-names,
-#base-info p {
-  margin: 0.8rem 0 0.8rem 0;
-}
-
-.base-info-names {
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-#additional-info {
-  width: 55%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: auto;
-  font-size: 1.1rem;
-  margin-left: 5rem;
-  line-height: 1.8rem;
-}
-
-#additional-info div {
-  margin: 1rem 0 1rem 0;
-}
-
-#close {
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  cursor: pointer;
-}
-
-.hide {
-  display: none;
-}
-
-/* POPUP HOUSES - STYLING */
-
-.popupGryffindor article {
-  background-color: #d33d3d;
-}
-
-.popupSlytherin article {
-  background-color: #4b9b66;
-}
-
-.popupRavenclaw article {
-  background-color: #4960ac;
-}
-
-.popupHufflepuff article {
-  background-color: #f1de6f;
-}
-
-/* DIALOGUE BOXES */
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.377);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.remove_other {
-  background-color: rgba(0, 0, 0, 0.6);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-}
-
-.dialog {
+.dialogue {
   text-align: center;
   position: fixed;
   top: 40%;
@@ -304,30 +200,20 @@ input {
   padding-top: 150px;
 }
 
-.squad_star {
-  width: 50px;
-  height: 50px;
-  background-color: yellow;
-}
-
-.dialog button {
+.dialogue button {
   margin-top: 35px;
 }
 
-.dialog h1 {
+.dialogue h1 {
   margin-bottom: 20px;
   display: block;
   font-size: 40px;
 }
 
-.dialog p {
+.dialogue p {
   font-size: 17px;
   display: block;
   margin-bottom: 10px;
-}
-
-.hide2 {
-  visibility: hidden;
 }
 
 #house_crest {
@@ -336,7 +222,7 @@ input {
 
 #modal h2 {
   font-weight: 400;
-margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #modal p {
@@ -434,59 +320,11 @@ button:focus {
   background-color: orangered;
 }
 
-#user_nav {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-
-.filter_btns {
-  display: inline-block;
-  padding: 20px 0;
-  text-align: center;
-}
-
-
-
-.info_box {
-  background-color: #f5f5f5;
-  color: #000;
-  padding: 25px;
-  height: 100%;
-  text-align: left;
-}
-
-.info_box h3 {
-  font-size: 28px;
-  font-weight: 400;
-  margin-bottom: 10px;
-}
-
-.info_box p {
-  font-family: 'Quicksand';
-  margin: 5px 0;
-}
-
-.heading_box {
-  margin-top: 10%;
-  text-align: center;
-}
-
-.overview {
-  display: inline-block;
-}
-
-.houses {
-  display: inline-block;
-  float: right;
-}
-
 @media screen and (min-width: 400px) {
   .header_inner {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    grid-gap: 50px;
+    grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
+    grid-gap: 100px;
     padding: 25px;
     max-width: 1300px;
     margin: 0 auto;

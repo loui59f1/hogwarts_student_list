@@ -17,11 +17,10 @@
     <div class="header_inner">
       <div class="column heading_box">
         <h1>Hogwarts students 1991</h1>
-        <h2 class="heading">Alle</h2>
         <div class="search_bar">
           <form>
             <div class="search_box">
-              <input type="text" id="search_by_name" name="name" placeholder="&#xf002 Search for student name" />
+              <input type="text" id="search_by_name" name="name" placeholder="🔍  Search for student name" />
             </div>
           </form>
         </div>
@@ -66,7 +65,7 @@
 
   <!-- Here is the main with the count and studentlist section -->
   <main>
-    <section id="list">
+    <section id="studentlist">
 
     </section>
 
@@ -78,7 +77,6 @@
           <p data-field="house">House: </p>
           <p data-field="enrollment">Status: </p>
         </div>
-        <div class="squad_star"></div>
         <div class="article_crest">
           <div class="house_crest"></div>
         </div>
@@ -96,7 +94,7 @@
       <div id="close">X</div>
       <div class="column img">
         <img data-field="image" src="" alt="" class="modal_img" />
-        <div id="icon_expelled" class="hide2">
+        <div id="icon_expelled" class="hide">
           <h3>Expelled</h3>
         </div>
       </div>
@@ -115,7 +113,7 @@
         <div class="student_actions">
           <button class="expelBtn">Expell student</button>
           <button data-field="prefect" data-field="false">Promote to prefect</button>
-          <button class="squad_btn hide2" data-squad="true">Make member of squad</button>
+          <button class="squad_btn hide" data-squad="true">Make member of squad</button>
         </div>
       </div>
     </article>
@@ -124,8 +122,8 @@
 
   <!--------Dialogue boxes -->
 
-  <div id="remove_other" class="modal hide2">
-    <div class="dialog">
+  <div id="remove_dialogue" class="modal hide">
+    <div class="dialogue">
       <div id="close">X</div>
       <h1>Warning!</h1>
       <p>There can be only two prefects in each house.</p>
