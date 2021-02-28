@@ -2,14 +2,14 @@
 
 document.addEventListener("DOMContentLoaded", init);
 
-let systemHacked = false;
-let allStudents = []; //Creating empty array
+// Creating arrays
+let allStudents = [];
 let allExpelled = [];
 let allInSquad = [];
-let bloodStatusList = [];
 
-const Student = {
-  //Creating the prototype template
+let systemHacked = false;
+
+const studentPrototype = {
   firstname: "",
   lastname: "",
   middlename: "null",
@@ -30,32 +30,28 @@ const settings = {
 };
 
 function init() {
-  console.log("Initialize program");
+  console.log("Initialize Hogwarts program");
 
-  // Tilføjer eventlisteners til filtrering og sorteringsknapper
   addEventListenersToButtons();
 
-  // Loader json dokument
-  loadJSON("https://petlatkea.dk/2021/hogwarts/students.json", prepareObjects);
+  // Loader JSON dokument med elever
+  loadJSON("https://petlatkea.dk/2021/hogwarts/students.json", cleanData);
 
-  // Loader blood status families
+  // Loader JSON dokument med elevers blodstatus
   loadJSON("https://petlatkea.dk/2021/hogwarts/families.json", defineBloodStatus);
 }
 
 function addEventListenersToButtons() {
+  // Tilføjer eventlisteners på filter og sort knapper
   document.querySelectorAll("[data-action='filter']").forEach((button) => button.addEventListener("click", selectFilter));
-
   document.querySelectorAll("[data-action='sort']").forEach((button) => button.addEventListener("click", selectSort));
-
-  // Eventlistener på søgefelt
-  document.querySelector("#search_by_name").addEventListener("input", searchStudent);
-
-  // eventlistener på udviste filter
   document.querySelector("[data-filter='expelled']").addEventListener("click", showExpelledStudent);
-
-  // eventlistener på squad filter
   document.querySelector("[data-filter='squad']").addEventListener("click", showSquadMembers);
 
+  // Tilføjer eventlisteners på søgefelt
+  document.querySelector("#search_by_name").addEventListener("input", searchStudent);
+
+  // Tilføjer eventlistener på H1 til hacking
   document.querySelector("header h1").addEventListener("click", hackTheSystem);
 }
 
@@ -66,6 +62,107 @@ async function loadJSON(url, event) {
   event(jsonData);
 
   console.log("JSON data loaded");
+}
+
+function cleanData(jsonData) {
+  jsonData.forEach((jsonObject) => {
+    const student = Object.create(studentPrototype);
+
+    //Find names by defining the spaces
+    const firstSpace = jsonObject.fullname.trim().indexOf(" ");
+    const lastSpace = jsonObject.fullname.trim().lastIndexOf(" ");
+
+    //Split string at spaces
+    //Seperate fullName in "fornavn, mellemnavn og efternavn"
+    // adskil det fulde navn til for, mellem, efternavn
+    student.firstName = jsonObject.fullname.trim().substring(0, firstSpace);
+    student.middleName = jsonObject.fullname.substring(firstSpace, lastSpace);
+
+    //If middleName includes "", it becomes a nickName
+    if (student.middleName.includes('"')) {
+      student.nickName = student.middleName;
+      student.middleName = "";
+    }
+
+    student.lastName = jsonObject.fullname.trim().substring(lastSpace).trim();
+
+    //Make first letter upperCase and the rest of them lowerCase
+    //firstname
+    student.firstNameCapitalized = student.firstName.substring(0, 1).toUpperCase() + student.firstName.substring(1, firstSpace).toLowerCase();
+
+    //Middlename
+    student.middleNameCapitalized = student.middleName.substring(1, 2).toUpperCase() + student.middleName.substring(2, lastSpace).toLowerCase();
+
+    //Lastname
+    student.lastNameCapitalized = student.lastName.substring(0, 1).toUpperCase() + student.lastName.substring(1).toLowerCase(student.lastName.length);
+
+    //Names with a hyphen, must have the first letter after the hyphen capitalized as well -> one of the student's lastname includes a hyphen
+    const ifHyphens = student.lastName.indexOf("-");
+
+    if (ifHyphens == -1) {
+      student.lastNameCapitalized = student.lastNameCapitalized.substring(0, 1).toUpperCase() + student.lastNameCapitalized.substring(1).toLowerCase();
+    } else {
+      student.lastNameCapitalized =
+        student.lastName.substring(0, 1).toUpperCase() +
+        student.lastName.substring(1, ifHyphens + 1).toLowerCase() +
+        student.lastName.substring(ifHyphens + 1, ifHyphens + 2).toUpperCase() +
+        student.lastName.substring(ifHyphens + 2).toLowerCase();
+    }
+
+    //Gender
+    student.gender = jsonObject.gender.substring(0).trim();
+    student.genderCapitalized = student.gender.substring(0, 1).toUpperCase() + student.gender.substring(1).toLowerCase();
+
+    //House
+    student.house = jsonObject.house.substring(0).trim();
+    student.houseCapitalized = student.house.substring(0, 1).toUpperCase() + student.house.substring(1).toLowerCase();
+
+    //Insert in prototype -> the array
+    student.firstName = student.firstNameCapitalized;
+    student.middleName = student.middleNameCapitalized;
+    student.lastName = student.lastNameCapitalized;
+
+    //SingleStudent.nickName = singleStudent.nickNameCapitalized;
+    student.gender = student.genderCapitalized;
+    student.house = student.houseCapitalized;
+
+    //insert correct photo filename
+    student.image = (
+      student.lastName +
+      "_" +
+      student.firstName.substring(0, 1) +
+      ".png"
+    ).toLowerCase();
+
+    if (student.firstName === "Justin") {
+      student.image = (
+        student.lastName.substring(student.lastName.indexOf("-") + 1) +
+        "_" +
+        student.firstName.substring(0, 1) +
+        ".png"
+      ).toLowerCase();
+    }
+
+    if (student.lastName === "Leanne") {
+      student.image = "#";
+    }
+
+    // Patil søstrene skal begge have anderledes billede
+    if (student.lastName === "Patil") {
+      student.image = (
+        student.lastName +
+        "_" +
+        student.firstName +
+        ".png"
+      ).toLowerCase();
+    }
+
+
+    //Adding all the objects into the array
+    allStudents.push(student);
+  });
+
+  buildList();
 }
 
 function defineBloodStatus(jsonData) {
@@ -83,111 +180,6 @@ function defineBloodStatus(jsonData) {
   })
 }
 
-function prepareObjects(jsonData) {
-  jsonData.forEach((jsonObject) => {
-    // TODO: Create new object with cleaned data - and store that in the allAnimals array
-
-    //Creating the singleStudent object
-    const singleStudent = Object.create(Student);
-
-    //Find names by defining the spaces
-    const firstSpace = jsonObject.fullname.trim().indexOf(" ");
-    const lastSpace = jsonObject.fullname.trim().lastIndexOf(" ");
-
-    //Split string at spaces
-    //Seperate fullName in "fornavn, mellemnavn og efternavn"
-    // adskil det fulde navn til for, mellem, efternavn
-    singleStudent.firstName = jsonObject.fullname.trim().substring(0, firstSpace);
-    singleStudent.middleName = jsonObject.fullname.substring(firstSpace, lastSpace);
-
-    //If middleName includes "", it becomes a nickName
-    if (singleStudent.middleName.includes('"')) {
-      singleStudent.nickName = singleStudent.middleName;
-      singleStudent.middleName = "";
-    }
-
-    singleStudent.lastName = jsonObject.fullname.trim().substring(lastSpace).trim();
-
-    //Make first letter upperCase and the rest of them lowerCase
-    //firstname
-    singleStudent.firstNameCapitalized = singleStudent.firstName.substring(0, 1).toUpperCase() + singleStudent.firstName.substring(1, firstSpace).toLowerCase();
-
-    //Middlename
-    singleStudent.middleNameCapitalized = singleStudent.middleName.substring(1, 2).toUpperCase() + singleStudent.middleName.substring(2, lastSpace).toLowerCase();
-
-    //Lastname
-    singleStudent.lastNameCapitalized = singleStudent.lastName.substring(0, 1).toUpperCase() + singleStudent.lastName.substring(1).toLowerCase(singleStudent.lastName.length);
-
-    //Names with a hyphen, must have the first letter after the hyphen capitalized as well -> one of the student's lastname includes a hyphen
-    const ifHyphens = singleStudent.lastName.indexOf("-");
-
-    if (ifHyphens == -1) {
-      singleStudent.lastNameCapitalized = singleStudent.lastNameCapitalized.substring(0, 1).toUpperCase() + singleStudent.lastNameCapitalized.substring(1).toLowerCase();
-    } else {
-      singleStudent.lastNameCapitalized =
-        singleStudent.lastName.substring(0, 1).toUpperCase() +
-        singleStudent.lastName.substring(1, ifHyphens + 1).toLowerCase() +
-        singleStudent.lastName.substring(ifHyphens + 1, ifHyphens + 2).toUpperCase() +
-        singleStudent.lastName.substring(ifHyphens + 2).toLowerCase();
-    }
-
-    //Gender
-    singleStudent.gender = jsonObject.gender.substring(0).trim();
-    singleStudent.genderCapitalized = singleStudent.gender.substring(0, 1).toUpperCase() + singleStudent.gender.substring(1).toLowerCase();
-
-    //House
-    singleStudent.house = jsonObject.house.substring(0).trim();
-    singleStudent.houseCapitalized = singleStudent.house.substring(0, 1).toUpperCase() + singleStudent.house.substring(1).toLowerCase();
-
-    //Insert in prototype -> the array
-    singleStudent.firstName = singleStudent.firstNameCapitalized;
-    singleStudent.middleName = singleStudent.middleNameCapitalized;
-    singleStudent.lastName = singleStudent.lastNameCapitalized;
-
-    //SingleStudent.nickName = singleStudent.nickNameCapitalized;
-    singleStudent.gender = singleStudent.genderCapitalized;
-    singleStudent.house = singleStudent.houseCapitalized;
-
-    //insert correct photo filename
-    singleStudent.image = (
-      singleStudent.lastName +
-      "_" +
-      singleStudent.firstName.substring(0, 1) +
-      ".png"
-    ).toLowerCase();
-
-    if (singleStudent.firstName === "Justin") {
-      singleStudent.image = (
-        singleStudent.lastName.substring(singleStudent.lastName.indexOf("-") + 1) +
-        "_" +
-        singleStudent.firstName.substring(0, 1) +
-        ".png"
-      ).toLowerCase();
-    }
-
-    if (singleStudent.firstName === "Leanne") {
-      singleStudent.image = "";
-    }
-
-    // Patil søstrene skal begge have anderledes billede
-    if (singleStudent.lastName === "Patil") {
-      singleStudent.image = (
-        singleStudent.lastName +
-        "_" +
-        singleStudent.firstName +
-        ".png"
-      ).toLowerCase();
-    }
-
-
-    //Adding all the objects into the array
-    allStudents.push(singleStudent);
-  });
-  //Calling the function displayList
-  buildList();
-  //displayList(allStudents);
-}
-
 function selectFilter(event) {
   const filter = event.target.dataset.filter;
   console.log(`User selected ${filter}`);
@@ -200,43 +192,31 @@ function setFilter(filter) {
 }
 
 function filterList(filteredList) {
-  //let filteredList = allStudents;
   if (settings.filterBy === "gryffindor") {
-    //create a filter of only gryff
-    filteredList = allStudents.filter(isGryf);
+    filteredList = allStudents.filter(isGryffindor);
   } else if (settings.filterBy === "hufflepuff") {
-    filteredList = allStudents.filter(isHuff);
+    filteredList = allStudents.filter(isHufflepuff);
   } else if (settings.filterBy === "ravenclaw") {
-    filteredList = allStudents.filter(isRave);
+    filteredList = allStudents.filter(isRavenclaw);
   } else if (settings.filterBy === "slytherin") {
-    filteredList = allStudents.filter(isSlyt);
-  } else if (settings.filterBy === "enrolled") {
-    filteredList = allStudents.filter(isEnrolled);
+    filteredList = allStudents.filter(isSlytherin);
   }
   return filteredList;
 }
 
-function isEnrolled(status) {
-  return status.house === "Enrolled";
-}
-
-function isExpelled(status) {
-  return status.house === "Expelled";
-}
-
-function isGryf(house) {
+function isGryffindor(house) {
   return house.house === "Gryffindor";
 }
 
-function isHuff(house) {
+function isHufflepuff(house) {
   return house.house === "Hufflepuff";
 }
 
-function isRave(house) {
+function isRavenclaw(house) {
   return house.house === "Ravenclaw";
 }
 
-function isSlyt(house) {
+function isSlytherin(house) {
   return house.house === "Slytherin";
 }
 
@@ -244,16 +224,6 @@ function selectSort(event) {
   const sortBy = event.target.dataset.sort;
   const sortDir = event.target.dataset.sortDirection;
 
-  //TO DO: FÅ SORTING PILE TIL AT VIRKE
-
-  //  //find "old" sortby element, and remove .sortBy
-  //  const oldElement = document.querySelector(`[data-sort='${settings.sortBy}']`);
-  //  oldElement.classList.remove("sortby");
-
-  //  //indicate active sort
-  //  event.target.classList.add("sortby");
-
-  // toggle the direction!
   if (sortDir === "asc") {
     event.target.dataset.sortDirection = "desc";
   } else {
@@ -294,81 +264,86 @@ function buildList() {
   const currentList = filterList(allStudents);
   const sortedList = sortList(currentList);
 
-  displayList(sortedList);
+  showList(sortedList);
   let sortedLength = sortedList.length;
   document.querySelector(".total_viewed").textContent = "Currently displayed: " + sortedLength;
 }
 
-function displayList(studentList) {
+function showList(studentList) {
   //Clear the list
   document.querySelector("#list").innerHTML = "";
 
   //Build a new list
-  studentList.forEach(displayStudent);
+  studentList.forEach(showStudent);
   displayNumbers();
 }
 
-function displayStudent(student) {
-  //Create clone
+function showStudent(student) {
   const clone = document.querySelector("template#hogwarts_student").content.cloneNode(true);
-  let house_crest = clone.querySelector(".house_crest");
+  const house_crest = clone.querySelector(".house_crest");
 
+  // Tilføjer hus logoet for eleven
   house_crest.classList.add(student.house.toLowerCase() + "_crest");
 
-  //Set clone data
+  // Indsætter data for eleven i boksene
   clone.querySelector("[data-field=firstname]").textContent = student.firstName + " " + student.lastName;
   clone.querySelector("[data-field=gender]").textContent = `Gender: ${student.gender}`;
   clone.querySelector("[data-field=house]").textContent = `House: ${student.house}`;
 
+  // Viser status for udvisning på eleven
+  if (student.enrollment === false) {
+    clone.querySelector("[data-field=enrollment]").textContent = "Status: Expelled";
+  } else {
+    clone.querySelector("[data-field=enrollment]").textContent = "Status: Enrolled";
+  }
+
+  // Viser stjerne for squad medlemmer
   if (student.inquisitorial === true) {
     clone.querySelector(".squad_star").classList.remove("hide2");
   } else {
     clone.querySelector(".squad_star").classList.add("hide2");
   }
 
-  if (student.enrollement === true) {
-    clone.querySelector("[data-field=enrollment]").textContent = "Status: Expelled";
-  } else {
-    clone.querySelector("[data-field=enrollment]").textContent = "Status: Enrolled";
-  }
+  // Tilføjer eventlistener på studerende, der åbner modal
+  clone.querySelector("article").addEventListener("click", () => showStudentModal(student));
 
-  //buildList(); //updating the list view
-
-  //tilføj klik til popop modal
-  clone.querySelector("article").addEventListener("click", () => displayModal(student));
-
-  //Append clone to list
   document.querySelector("#list").appendChild(clone);
 }
 
-function displayModal(student) {
+function showStudentModal(student) {
   const modal = document.querySelector("#modal");
   const crest = document.querySelector(".crest");
   const icon_expelled = document.querySelector("#icon_expelled");
 
+  // Gør modal synlig når funktionen kaldes
   modal.style.display = "block";
   modal.classList = "";
 
+  // Styling af modal ift. elevens hus
   modal.classList.add(student.house.toLowerCase());
-  crest.classList.add(student.house.toLowerCase() + "_crest");
   modal.querySelector(".expelBtn").style.display = "block";
   modal.querySelector("[data-field=prefect]").style.display = "block";
   modal.querySelector(".squad_btn").style.display = "block";
+  crest.classList.add(student.house.toLowerCase() + "_crest");
 
-  console.log("open popup");
-
-  //Når vi klikker udviser vi den studerende
+  // Tilføjer eventlistener for udvisning af eleven
   document.querySelector(".expelBtn").onclick = () => {
     expelStudent(student);
   };
 
+  // Tilføjer eventlistener for prefect af eleven
+  document.querySelector("[data-field=prefect]").onclick = () => {
+    clickPrefect(student);
+  };
+
+  // Indsætter data på eleven i modal
   modal.querySelector("#modal h2").textContent = `${student.firstName} ${student.lastName}`;
   modal.querySelector("[data-field=gender]").textContent = `Gender: ${student.gender}`;
   modal.querySelector("[data-field=house]").textContent = `House: ${student.house}`;
   modal.querySelector("[data-field=bloodstatus]").textContent = `Bloodstatus: ${student.bloodstatus}`;
   modal.querySelector("[data-field=image]").src = `images/` + student.image;
 
-  // EXPELL KNAP OG TEXT
+  // Er eleven udvist/er eleven ikke udvist - tekst og knap status
   if (student.enrollment === true) {
     modal.querySelector("[data-field=enrollment]").textContent = "Status: Enrolled";
     modal.querySelector(".expelBtn").textContent = "Expel student";
@@ -382,24 +357,16 @@ function displayModal(student) {
     icon_expelled.classList.remove("hide2");
   }
 
-  if (student.inquisitorial === true) {
-    modal.querySelector("[data-field=squad]").textContent = "Member status: Is a member";
-    modal.querySelector(".squad_btn").textContent = "Remove as member";
-  } else {
-    modal.querySelector("[data-field=squad]").textContent = "Member status: Not a member";
-    modal.querySelector(".squad_btn").textContent = "Make a member of squad";
-  }
-
+  // Er eleven prefect/er eleven ikke prefect - tekst og knap status
   if (student.prefect === true) {
-    modal.querySelector("[data-field=prefected]").textContent = "Is a prefect";
+    modal.querySelector("[data-field=prefected]").textContent = "Prefect status: Is a prefect";
     modal.querySelector("[data-field=prefect]").textContent = "Remove prefect";
   } else {
     modal.querySelector("[data-field=prefected]").textContent = "Prefect status: Not a prefect";
     modal.querySelector("[data-field=prefect]").textContent = "Promote to prefect";
   }
 
-  // Hvis der bliver klikket på knappen ændres student enrollment
-  //Expel student
+  // Udvisning
   function expelStudent(student) {
     if (student.firstName.toLowerCase() === "louise") {
       alert("CANNOT BE EXPELLED");
@@ -419,7 +386,7 @@ function displayModal(student) {
       // tilføjer til allexpelled liste
       allExpelled.push(student);
 
-      displayModal(student);
+      showStudentModal(student);
       buildList();
 
     }
@@ -427,11 +394,12 @@ function displayModal(student) {
   }
 
   //prefects
-  modal.querySelector("[data-field=prefect]").dataset.prefect = student.prefect;
+  // modal.querySelector("[data-field=prefect]").dataset.prefect = student.prefect;
 
-  modal.querySelector("[data-field=prefect]").addEventListener("click", clickPrefect);
+  // modal.querySelector("[data-field=prefect]").addEventListener("click", clickPrefect);
 
   function clickPrefect() {
+    modal.querySelector("[data-field=prefect]").removeEventListener("click", clickPrefect);
     if (student.prefect === true) {
       student.prefect = false;
       console.log("Student prefect false", student);
@@ -442,9 +410,10 @@ function displayModal(student) {
       console.log(student.prefect);
     }
     buildList(allStudents);
+    showStudentModal(student);
   }
 
-  // Only slytherin students --> make squad member
+  // Only slytherin students + pure blooded --> make squad member
   if (student.house.toLowerCase() === "slytherin") {
     console.log("in slytherin or pure blooded");
     modal.querySelector(".squad_btn").classList.remove("hide2");
@@ -458,44 +427,16 @@ function displayModal(student) {
     modal.querySelector(".squad_btn").addEventListener("click", () => {
       makeSquadMember(student);
     });
-  }
-
-  else {
+  } else {
     modal.querySelector(".squad_btn").classList.add("hide2");
   }
 
-  function makeSquadMember(student) {
-
-    // UNDERSØG OM SYSTEMET ER HACKET = LAV TIMEOUT
-    // if (systemHacked === true) {
-
-    // }
-
-
-    if (student.inquisitorial === true) {
-      student.inquisitorial = false;
-      console.log("Student false", student);
-      console.log(student.inquisitorial);
-      console.log(allInSquad);
-      modal.querySelector("[data-field=squad]").textContent = "Not a member";
-      modal.querySelector(".squad_btn").textContent = "Make a member of squad";
-
-      allInSquad.splice(allInSquad.indexOf(student), 1);
-
-    }
-    if (student.inquisitorial === false) {
-      student.inquisitorial = true;
-      console.log("Student true", student);
-      console.log(student.inquisitorial);
-      console.log(allInSquad);
-      modal.querySelector("[data-field=squad]").textContent = "Member status: Member of squad";
-      modal.querySelector(".squad_btn").textContent = "Remove as member";
-
-      // Tilføjer elev til squad list
-      allInSquad.push(student);
-
-    }
-    buildList(allStudents);
+  if (student.inquisitorial === true) {
+    modal.querySelector("[data-field=squad]").textContent = "Member status: Is a member";
+    modal.querySelector(".squad_btn").textContent = "Remove as member";
+  } else {
+    modal.querySelector("[data-field=squad]").textContent = "Member status: Not a member";
+    modal.querySelector(".squad_btn").textContent = "Make a member of squad";
   }
 
   //luk modal
@@ -523,10 +464,40 @@ function showExpelledStudent() {
   if (allExpelled.length === 0) {
     document.querySelector("#list").textContent = "There are no students expelled from Hogwarts";
   } else {
-    displayList(allExpelled);
+    showList(allExpelled);
   }
 
 }
+
+function makeSquadMember(student) {
+  // UNDERSØG OM SYSTEMET ER HACKET = LAV TIMEOUT
+  //document.querySelector(".squad_btn").removeEventListener("click", makeSquadMember);
+
+  if (student.inquisitorial === true) {
+    student.inquisitorial = false;
+    console.log(student.inquisitorial);
+    console.log(allInSquad);
+
+    modal.querySelector("[data-field=squad]").textContent = "Member status: Not a member";
+    modal.querySelector(".squad_btn").textContent = "Make a member of squad";
+
+    // Fjerner fra squad list
+    allInSquad.splice(allInSquad.indexOf(student), 1);
+
+  } else if (student.inquisitorial === false) {
+    student.inquisitorial = true;
+    console.log(student.inquisitorial);
+    console.log(allInSquad);
+
+    modal.querySelector("[data-field=squad]").textContent = "Member status: Is a member";
+    modal.querySelector(".squad_btn").textContent = "Remove as member";
+
+    // Tilføjer elev til squad list
+    allInSquad.push(student);
+  }
+  buildList(allStudents);
+}
+
 
 function showSquadMembers() {
   console.log("Show all squad members")
@@ -534,7 +505,7 @@ function showSquadMembers() {
   if (allInSquad.length === 0) {
     document.querySelector("#list").textContent = "There are no members of the Inquisitorial Squad";
   } else {
-    displayList(allInSquad);
+    showList(allInSquad);
   }
 
 }
@@ -657,10 +628,10 @@ function searchStudent() {
 
   // Hvis søgefeltet er tomt viser det igen de studerende
   if (searchstring == " ") {
-    displayList(allStudents);
+    showList(allStudents);
   }
   //update surrently showing students to search result
-  displayList(searchResult);
+  showList(searchResult);
 }
 
 function displayNumbers() {
@@ -721,43 +692,40 @@ function hackTheSystem() {
   if (systemHacked === false) {
     systemHacked = true;
     console.log(systemHacked);
-    console.log(systemHacked);
-    console.log("HACK THE SYSTEM")
-    messBloodStatusUp();
+    alert("OH NO! YOU HAVE BEEN HACKED");
+    console.log("HACK THE SYSTEM");
+
     // tilføjer mig til allstudents liste
-    let myself = Object.create(Student);
+    let myself = Object.create(studentPrototype);
     myself.firstName = "Louise";
     myself.lastName = "Nielsen";
     myself.house = "Gryffindor";
-    myself.bloodstatus = "Pure blooded";
+    myself.bloodstatus = "Half blooded";
     myself.enrollment = true;
     myself.prefect = false;
     myself.gender = "Girl";
+    myself.image = "#";
 
     allStudents.push(myself);
-    buildList(allStudents);
+    messUpTheBloodStatus();
+    buildList();
+
   } else {
     alert("Already hacked");
   }
 
-
 }
 
-function messBloodStatusUp() {
-  alert("OH NO! YOU'VE BEEN HACKED");
-  // Kigger i allstudents array og ændrer blodstatus
+function messUpTheBloodStatus() {
   allStudents.forEach((student) => {
-    if (student.bloodstatus.toLowerCase() === "Pure blooded") {
+    if (student.bloodstatus === "Pure blooded") {
       student.bloodstatus = "Half blooded";
+    } else if (student.bloodstatus === "Half blooded") {
+      student.bloodstatus = "Muggleborn"
+    } else {
+      student.bloodstatus = "Pure blooded"
     }
-    if (student.bloodstatus.toLowerCase() === "Half blooded") {
-      student.bloodstatus = "Muggleborn";
-    }
-    if (student.bloodstatus.toLowerCase() === "Mugglborn") {
-      student.bloodstatus = "Pure blooded";
-    }
-  });
-  buildList();
+  })
 }
 
 // NEED TO CHECK IF SYSTEM WAS HACKED
